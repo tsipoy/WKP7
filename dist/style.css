@@ -1,0 +1,15 @@
+form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;  
+}
+
+label,
+select {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+}
+
+/*# sourceMappingURL=/style.css.map */
