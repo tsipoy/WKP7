@@ -16,9 +16,9 @@
 	<h2>Library</h2>
 	<div class="add-book">
 		<h4>Add a book</h4>
-		<form action="/">
-			<label for="title">Book title<input type="text" id="title"></label>
-			<label for="author">Book author<input type="text" id="author"></label>
+		<form action="/" class="handle-form">
+			<label for="title">Book title<input type="text" id="title" name="title"></label>
+			<label for="author">Book author<input type="text" id="author" name="author"></label>
 			<label for="genre">Book genre
 				<select name="genre" id="genre">
 					<option value="comedy">Comedy</option>
@@ -27,22 +27,27 @@
 					<option value="romantic">Romantic</option>
 				</select>
 			</label>
-			<label for="page">Book pages<input type="number" id="page"></label>
-			<label for="status">Status<input type="text" id="status"></label>
-			<button class="add-button">ADD</button>
+			<label for="page">Book pages<input type="number" id="page" name="pages"></label>
+			<label for="status">Status
+				<select id="status" name="status">
+					<option value="read">Read</option>
+					<option value="not yet">Not yet</option>
+				</select>
+			</label>
+			<button class="add-button" type="submit">ADD</button>
 		</form>
 	</div>
-	<div class="the-book">
-		<nav class="wrapper">
-			<ul class="list">
-				<li>TITLE</li>
-				<li>AUTHOR</li>
-				<li>GENRE</li>
-				<li>PAGES</li>
-				<li>READ</li>
-			</ul>
-			<ul class="list-content"></ul>
-		</nav>
+	<div class="title">
+		<ul class="title-list">
+			<li>TITLE</li>
+			<li>AUTHOR</li>
+			<li>GENRE</li>
+			<li>PAGES</li>
+			<li>READ</li>
+		</ul>
+	</div>
+	<div class="books">
+		<nav class="books-list"></nav>
 	</div>
 	<script src="/script.75da7f30.js"></script>
 </body>

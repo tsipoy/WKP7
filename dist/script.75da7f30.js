@@ -118,51 +118,130 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"script.js":[function(require,module,exports) {
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 console.log('It works!');
 var libraries = [{
   title: 'Little woman',
   author: 'Lisa Alcott',
-  genre: 'Novel',
-  pages: 50,
+  genre: 'Comedy',
+  pages: 300,
   read: true
 }, {
-  title: 'HarryPotter',
-  author: 'Natacha',
+  title: 'Northern light',
+  author: 'Philip Paulman',
   genre: 'Novel',
-  pages: 100,
+  pages: 400,
   read: true
 }, {
-  title: 'Little woman 1',
-  author: 'Lisa Alcott 2',
-  genre: 'Novel 2',
+  title: 'Harry Potter',
+  author: 'Jk Rouling',
+  genre: 'Fantasy',
   pages: 150,
   read: false
 }]; // Grab elements
 
-var listContent = document.querySelector('.list-content'); // show the library list from the array
-// const libraryList = (arr) => {
-//     return arr.map(library => {
-//         const html = `
-//             <ul>
-//                 <li>${library.title}</li>
-//                 <li>${library.author}</li>
-//                 <li>${library.pages}</li>
-//                 <li>${library.genre}</li>
-//                 <li>${library.read}</li>
-//             </ul>
-//         `;
-//     }).join('');
-//     listContent.insertAdjacentHTML('afterbegin', html)
-// };
+var listContent = document.querySelector('.books');
+var listBooks = document.querySelector('.books-list');
+var addButton = document.querySelector('.add-button');
+var form = document.querySelector('.add-book');
+var bookTitle = title.querySelector('#title');
+var bookAuthor = author.querySelector('#author');
+var bookPages = page.querySelector('#page');
+var bookGenre = genre.querySelector('#genre');
+var bookstatus = document.querySelector('#status'); // Display the list 
 
-var libraryList = function libraryList(arr) {
-  return arr.map(function (library) {
-    var listHtml = "\n                <li>".concat(library.title, "</li>\n                <li>").concat(library.author, "</li>\n                <li>").concat(library.pages, "</li>\n                <li>").concat(library.genre, "</li>\n                <li>").concat(library.read, "</li>\n    ");
-    listContent.insertAdjacentHTML('afterbegin', listHtml);
-  });
+var libraryList = function libraryList() {
+  var listHtml = libraries.map(function (library) {
+    return "\n            <ul class=\"books-list\">\n                <li>".concat(library.title, "</li>\n                <li>").concat(library.author, "</li>\n                <li>").concat(library.genre, "</li>\n                <li>").concat(library.pages, "</li>\n                <input type=\"checkbox\" id=\"read\" name=\"read\">\n                <button class=\"delete-button\">Delete</button>\n            </ul>\n    ");
+  }).join('');
+  listBooks.insertAdjacentHTML('afterbegin', listHtml);
 };
 
-libraryList(libraries);
+libraryList(); // hold state
+
+var items = [];
+
+var handleSubmit = function handleSubmit(e) {
+  e.preventDefault();
+  var title = e.currentTarget.value;
+  var author = e.currentTarget.value;
+  var genre = e.currentTarget.value;
+  var pages = e.currentTarget.value;
+  var status = e.currentTarget.value;
+  if (!title) return;
+  var item = {
+    title: title,
+    author: author,
+    genre: genre,
+    page: pages,
+    status: status
+  }; //  push it
+
+  items.push(item);
+  console.info("There is ".concat(items.length, " here."));
+  e.terget.reset();
+  listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
+};
+
+var displayItems = function displayItems() {
+  console.log(items);
+  var html = items.map(function (item) {
+    return " \n                 <ul class=\"books-list\">\n                     <li>".concat(item.title, "</li>\n                     <li>").concat(item.author, "</li>\n                     <li>").concat(item.genre, "</li>\n                     <li>").concat(item.pages, "</li>\n                     <input type=\"checkbox\" id=\"").concat(item.id, "\" name=\"read\">\n                 </ul>");
+  }).join('');
+  listBooks.innerHTML = html;
+};
+
+var mirrorToLocalStorage = function mirrorToLocalStorage() {
+  console.info('mirroring items to local storage');
+  localStorage.setItem('items', JSON.stringify(items));
+};
+
+var restoreFromLocalStorage = function restoreFromLocalStorage() {
+  console.info('Restoring from LS');
+  var lsItems = JSON.parse(localStorage.getItem('items')); // check if there is something inside local storage
+
+  if (lsItems) {
+    // push has no limit for arguments
+    items.push.apply(items, _toConsumableArray(lsItems));
+    listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
+  }
+}; // const deleteItems = (id) => {
+//     console.log('deleting items', id);
+//     items = items.filter(item => item.id !== id);
+//     listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
+// };
+// const marksAsComplete = id => {
+//     console.log(id);
+//     const itemRef = items.find(item => item.id === id);
+//     itemRef.complete = !itemRef.complete;
+//     listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
+// }
+
+
+form.addEventListener('submit', handleSubmit); // we listen for our own event, and launch the function displayItems, when clicking the button
+
+listBooks.addEventListener('itemsUpdated', displayItems);
+listBooks.addEventListener('itemsUpdated', mirrorToLocalStorage); // listBooks.addEventListener('click', function (e) {
+//     const id = parseInt(e.target.value);
+//     if (e.target.matches('button.delete-button')) {
+//         deleteItems(id);
+//     }
+//     if (e.target.matches('input[type="checkbox"]')) {
+//         marksAsComplete(id);
+//     }
+// });
+// restoreFromLocalStorage();
 },{}],"../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -191,7 +270,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54030" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49818" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
