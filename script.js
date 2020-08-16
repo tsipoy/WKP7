@@ -7,6 +7,7 @@ const libraries = [
         genre: 'Comedy',
         pages: 300,
         read: true,
+        id: 111,
     },
     {
         title: 'Northern light',
@@ -14,6 +15,7 @@ const libraries = [
         genre: 'Novel',
         pages: 400,
         read: true,
+        id: 22222,
     },
     {
         title: 'Harry Potter',
@@ -21,6 +23,7 @@ const libraries = [
         genre: 'Fantasy',
         pages: 150,
         read: false,
+        id: 333,
     },
 
 ];
@@ -40,9 +43,9 @@ const bookstatus = document.querySelector('#status');
 
 // Display the list 
 const libraryList = () => {
-    const listHtml= libraries.map(library => 
-      `
-            <ul class="books-list">
+    const listHtml = libraries.map(library =>
+        `
+            <ul class="books-list" id="${library.id}">
                 <li>${library.title}</li>
                 <li>${library.author}</li>
                 <li>${library.genre}</li>
@@ -51,8 +54,8 @@ const libraryList = () => {
                 <button class="delete-button">Delete</button>
             </ul>
     `).join('');
-        listBooks.insertAdjacentHTML('afterbegin', listHtml);
-    
+    listBooks.insertAdjacentHTML('afterbegin', listHtml);
+
 };
 libraryList();
 
@@ -61,27 +64,35 @@ let items = [];
 
 const handleSubmit = e => {
     e.preventDefault();
-    const title = e.currentTarget.value;
-    const author = e.currentTarget.value;
-    const genre = e.currentTarget.value;
-    const pages = e.currentTarget.value;
-    const status = e.currentTarget.value;
+    const title = e.target.title.value;
+    console.log(title);
+    const author = e.target.author.value;
+    console.log(author);
+    const genre = e.target.genre.value;
+    console.log(genre);
+    const pages = e.target.pages.value;
+    console.log(pages);
+    const status = e.target.status.value;
+    console.log(status);
 
-    if (!title) return;
+    //if (!title) return;
     const item = {
         title: title,
         author: author,
         genre: genre,
         page: pages,
         status: status,
+        complete: false,
     };
 
     //  push it
     items.push(item);
+    console.log(items);
     console.info(`There is ${items.length} here.`);
-    e.terget.reset();
+    e.target.reset();
     listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
 };
+
 
 const displayItems = () => {
     console.log(items);
@@ -93,12 +104,13 @@ const displayItems = () => {
                      <li>${item.title}</li>
                      <li>${item.author}</li>
                      <li>${item.genre}</li>
-                     <li>${item.pages}</li>
-                     <input type="checkbox" id="${item.id}" name="read">
+                     <li>${item.page}</li>
+                     <input type="checkbox" id="${item.id}" ${item.complete ? 'checked' : ''} name="read">
+                     <button class="delete-button">Delete</button>
                  </ul>`
         )
         .join('');
-    listBooks.innerHTML = html;
+    listBooks.insertAdjacentHTML('afterend', html);
 };
 
 const mirrorToLocalStorage = () => {
@@ -112,23 +124,23 @@ const restoreFromLocalStorage = () => {
     // check if there is something inside local storage
     if (lsItems) {
         // push has no limit for arguments
-         items.push(...lsItems);
-            listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
+        items.push(...lsItems);
+        listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
     }
 };
 
-// const deleteItems = (id) => {
-//     console.log('deleting items', id);
-//     items = items.filter(item => item.id !== id);
-//     listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
-// };
+const deleteItems = (id) => {
+    console.log('deleting items', id);
+    items = items.filter(item => item.id !== id);
+    listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
+};
 
-// const marksAsComplete = id => {
-//     console.log(id);
-//     const itemRef = items.find(item => item.id === id);
-//     itemRef.complete = !itemRef.complete;
-//     listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
-// }
+const marksAsComplete = id => {
+    console.log(id);
+    const itemRef = items.find(item => item.id === id);
+    itemRef.complete = !itemRef.complete;
+    listBooks.dispatchEvent(new CustomEvent('itemsUpdated'));
+}
 
 
 form.addEventListener('submit', handleSubmit);
@@ -136,14 +148,14 @@ form.addEventListener('submit', handleSubmit);
 listBooks.addEventListener('itemsUpdated', displayItems);
 listBooks.addEventListener('itemsUpdated', mirrorToLocalStorage);
 
-// listBooks.addEventListener('click', function (e) {
-//     const id = parseInt(e.target.value);
-//     if (e.target.matches('button.delete-button')) {
-//         deleteItems(id);
-//     }
-//     if (e.target.matches('input[type="checkbox"]')) {
-//         marksAsComplete(id);
-//     }
-// });
+listBooks.addEventListener('click', function (e) {
+    const id = parseInt(e.target.value);
+    if (e.target.matches('button.delete-button')) {
+        deleteItems(id);
+    }
+    if (e.target.matches('input[type="checkbox"]')) {
+        marksAsComplete(id);
+    }
+});
 
-// restoreFromLocalStorage();
+restoreFromLocalStorage();
