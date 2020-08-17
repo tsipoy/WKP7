@@ -51,7 +51,9 @@ const libraryList = () => {
                 <li>${library.genre}</li>
                 <li>${library.pages}</li>
                 <input type="checkbox" id="read" name="read">
-                <button class="delete-button">Delete</button>
+                <button class="delete-button" type="button">
+                    <img class="delete-button" src="./img/delete-icon.png" alt="delete">
+                </button>
             </ul>
     `).join('');
     listBooks.insertAdjacentHTML('afterbegin', listHtml);
@@ -106,7 +108,9 @@ const displayItems = () => {
                      <li>${item.genre}</li>
                      <li>${item.page}</li>
                      <input type="checkbox" id="${item.id}" ${item.complete ? 'checked' : ''} name="read">
-                     <button class="delete-button">Delete</button>
+                     <button class="delete-button" type="button">
+                    <img class="delete-button" src="./img/delete-icon.png" alt="delete">
+                </button>
                  </ul>`
         )
         .join('');

@@ -166,7 +166,7 @@ var bookstatus = document.querySelector('#status'); // Display the list
 
 var libraryList = function libraryList() {
   var listHtml = libraries.map(function (library) {
-    return "\n            <ul class=\"books-list\" id=\"".concat(library.id, "\">\n                <li>").concat(library.title, "</li>\n                <li>").concat(library.author, "</li>\n                <li>").concat(library.genre, "</li>\n                <li>").concat(library.pages, "</li>\n                <input type=\"checkbox\" id=\"read\" name=\"read\">\n                <button class=\"delete-button\">Delete</button>\n            </ul>\n    ");
+    return "\n            <ul class=\"books-list\" id=\"".concat(library.id, "\">\n                <li>").concat(library.title, "</li>\n                <li>").concat(library.author, "</li>\n                <li>").concat(library.genre, "</li>\n                <li>").concat(library.pages, "</li>\n                <input type=\"checkbox\" id=\"read\" name=\"read\">\n                <button class=\"delete-button\" type=\"button\">\n                    <img class=\"delete-button\" src=\"./img/delete-icon.png\" alt=\"delete\">\n                </button>\n            </ul>\n    ");
   }).join('');
   listBooks.insertAdjacentHTML('afterbegin', listHtml);
 };
@@ -207,7 +207,7 @@ var handleSubmit = function handleSubmit(e) {
 var displayItems = function displayItems() {
   console.log(items);
   var html = items.map(function (item) {
-    return " \n                 <ul class=\"books-list\">\n                     <li>".concat(item.title, "</li>\n                     <li>").concat(item.author, "</li>\n                     <li>").concat(item.genre, "</li>\n                     <li>").concat(item.page, "</li>\n                     <input type=\"checkbox\" id=\"").concat(item.id, "\" ").concat(item.complete ? 'checked' : '', " name=\"read\">\n                     <button class=\"delete-button\">Delete</button>\n                 </ul>");
+    return " \n                 <ul class=\"books-list\">\n                     <li>".concat(item.title, "</li>\n                     <li>").concat(item.author, "</li>\n                     <li>").concat(item.genre, "</li>\n                     <li>").concat(item.page, "</li>\n                     <input type=\"checkbox\" id=\"").concat(item.id, "\" ").concat(item.complete ? 'checked' : '', " name=\"read\">\n                     <button class=\"delete-button\" type=\"button\">\n                    <img class=\"delete-button\" src=\"./img/delete-icon.png\" alt=\"delete\">\n                </button>\n                 </ul>");
   }).join('');
   listBooks.insertAdjacentHTML('afterend', html);
 };
@@ -292,7 +292,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60952" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65226" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
